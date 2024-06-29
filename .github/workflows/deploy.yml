@@ -32,11 +32,11 @@ jobs:
         run: "npm install"
 
       - name: Build step
-        run: "npm run build"
+        run: "node server.js"
 
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
           project: "mdrahmatali-realtime-84"
           entrypoint: "https://deno.land/std@0.217.0/http/file_server.ts"
-          root: "out"
+          root: ""
