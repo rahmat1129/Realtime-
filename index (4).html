@@ -1,0 +1,377 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-4xl">
+        <h1 class="text-3xl font-bold mb-6 text-center">Notes App</h1>
+        
+        <div class="mb-4 flex flex-wrap gap-2 justify-center">
+            <button id="bold-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-bold"></i></button>
+            <button id="italic-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-italic"></i></button>
+            <button id="underline-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-underline"></i></button>
+            <button id="strikethrough-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-strikethrough"></i></button>
+            <button id="align-left-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-align-left"></i></button>
+            <button id="align-center-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-align-center"></i></button>
+            <button id="align-right-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-align-right"></i></button>
+            <button id="align-justify-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-align-justify"></i></button>
+            <button id="ordered-list-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-list-ol"></i></button>
+            <button id="unordered-list-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-list-ul"></i></button>
+            <button id="indent-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-indent"></i></button>
+            <button id="outdent-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-outdent"></i></button>
+            <button id="insert-link-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-link"></i></button>
+            <button id="insert-image-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-image"></i></button>
+            <button id="insert-table-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-table"></i></button>
+            <button id="font-size-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-text-height"></i></button>
+            <button id="font-color-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-palette"></i></button>
+            <button id="highlight-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-highlighter"></i></button>
+            <button id="undo-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-undo"></i></button>
+            <button id="redo-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-redo"></i></button>
+            <button id="cut-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-cut"></i></button>
+            <button id="copy-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-copy"></i></button>
+            <button id="paste-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-paste"></i></button>
+            <button id="select-all-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-select-all"></i></button>
+            <button id="print-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-print"></i></button>
+            <button id="fullscreen-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-expand"></i></button>
+            <button id="save-btn" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"><i class="fas fa-save"></i> Save</button>
+            <button id="clear-btn" class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"><i class="fas fa-trash"></i> Clear</button>
+            <button id="speak-btn" class="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600"><i class="fas fa-volume-up"></i> Speak</button>
+            <button id="download-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-download"></i> Download</button>
+            <button id="upload-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-upload"></i> Upload</button>
+            <button id="find-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-search"></i> Find</button>
+            <button id="replace-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-exchange-alt"></i> Replace</button>
+            <button id="spellcheck-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-spell-check"></i> Spell Check</button>
+            <button id="grammar-check-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-clipboard-check"></i> Grammar Check</button>
+            <button id="word-count-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-sort-numeric-up"></i> Word Count</button>
+            <button id="char-count-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-sort-alpha-up"></i> Char Count</button>
+            <button id="toggle-dark-mode-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-moon"></i> Dark Mode</button>
+            <button id="toggle-read-only-btn" class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"><i class="fas fa-lock"></i> Read Only</button>
+        </div>
+        
+        <div class="mb-4">
+            <div id="editor" class="w-full p-2 border border-gray-300 rounded h-64 bg-white" contenteditable="true" placeholder="Write your notes here..."></div>
+        </div>
+        
+        <div class="mb-4">
+            <h2 class="text-xl font-semibold mb-2">Saved Notes</h2>
+            <ul id="notes-list" class="list-disc list-inside"></ul>
+        </div>
+    </div>
+
+    <script>
+        const editor = document.getElementById('editor');
+        const boldBtn = document.getElementById('bold-btn');
+        const italicBtn = document.getElementById('italic-btn');
+        const underlineBtn = document.getElementById('underline-btn');
+        const strikethroughBtn = document.getElementById('strikethrough-btn');
+        const alignLeftBtn = document.getElementById('align-left-btn');
+        const alignCenterBtn = document.getElementById('align-center-btn');
+        const alignRightBtn = document.getElementById('align-right-btn');
+        const alignJustifyBtn = document.getElementById('align-justify-btn');
+        const orderedListBtn = document.getElementById('ordered-list-btn');
+        const unorderedListBtn = document.getElementById('unordered-list-btn');
+        const indentBtn = document.getElementById('indent-btn');
+        const outdentBtn = document.getElementById('outdent-btn');
+        const insertLinkBtn = document.getElementById('insert-link-btn');
+        const insertImageBtn = document.getElementById('insert-image-btn');
+        const insertTableBtn = document.getElementById('insert-table-btn');
+        const saveBtn = document.getElementById('save-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const speakBtn = document.getElementById('speak-btn');
+        const fontSizeBtn = document.getElementById('font-size-btn');
+        const fontColorBtn = document.getElementById('font-color-btn');
+        const highlightBtn = document.getElementById('highlight-btn');
+        const undoBtn = document.getElementById('undo-btn');
+        const redoBtn = document.getElementById('redo-btn');
+        const cutBtn = document.getElementById('cut-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const pasteBtn = document.getElementById('paste-btn');
+        const selectAllBtn = document.getElementById('select-all-btn');
+        const printBtn = document.getElementById('print-btn');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const uploadBtn = document.getElementById('upload-btn');
+        const findBtn = document.getElementById('find-btn');
+        const replaceBtn = document.getElementById('replace-btn');
+        const spellcheckBtn = document.getElementById('spellcheck-btn');
+        const grammarCheckBtn = document.getElementById('grammar-check-btn');
+        const wordCountBtn = document.getElementById('word-count-btn');
+        const charCountBtn = document.getElementById('char-count-btn');
+        const toggleDarkModeBtn = document.getElementById('toggle-dark-mode-btn');
+        const toggleReadOnlyBtn = document.getElementById('toggle-read-only-btn');
+        const notesList = document.getElementById('notes-list');
+
+        boldBtn.addEventListener('click', () => {
+            document.execCommand('bold');
+        });
+
+        italicBtn.addEventListener('click', () => {
+            document.execCommand('italic');
+        });
+
+        underlineBtn.addEventListener('click', () => {
+            document.execCommand('underline');
+        });
+
+        strikethroughBtn.addEventListener('click', () => {
+            document.execCommand('strikethrough');
+        });
+
+        alignLeftBtn.addEventListener('click', () => {
+            document.execCommand('justifyLeft');
+        });
+
+        alignCenterBtn.addEventListener('click', () => {
+            document.execCommand('justifyCenter');
+        });
+
+        alignRightBtn.addEventListener('click', () => {
+            document.execCommand('justifyRight');
+        });
+
+        alignJustifyBtn.addEventListener('click', () => {
+            document.execCommand('justifyFull');
+        });
+
+        orderedListBtn.addEventListener('click', () => {
+            document.execCommand('insertOrderedList');
+        });
+
+        unorderedListBtn.addEventListener('click', () => {
+            document.execCommand('insertUnorderedList');
+        });
+
+        indentBtn.addEventListener('click', () => {
+            document.execCommand('indent');
+        });
+
+        outdentBtn.addEventListener('click', () => {
+            document.execCommand('outdent');
+        });
+
+        insertLinkBtn.addEventListener('click', () => {
+            const url = prompt('Enter the URL');
+            if (url) {
+                document.execCommand('createLink', false, url);
+            }
+        });
+
+        insertImageBtn.addEventListener('click', () => {
+            const url = prompt('Enter the image URL');
+            if (url) {
+                document.execCommand('insertImage', false, url);
+            }
+        });
+
+        insertTableBtn.addEventListener('click', () => {
+            const rows = prompt('Enter the number of rows');
+            const cols = prompt('Enter the number of columns');
+            if (rows && cols) {
+                let table = '<table border="1">';
+                for (let i = 0; i < rows; i++) {
+                    table += '<tr>';
+                    for (let j = 0; j < cols; j++) {
+                        table += '<td>&nbsp;</td>';
+                    }
+                    table += '</tr>';
+                }
+                table += '</table>';
+                document.execCommand('insertHTML', false, table);
+            }
+        });
+
+        saveBtn.addEventListener('click', () => {
+            const noteContent = editor.innerHTML.trim();
+            if (noteContent) {
+                const noteItem = document.createElement('li');
+                noteItem.innerHTML = noteContent;
+                notesList.appendChild(noteItem);
+                editor.innerHTML = '';
+                Swal.fire('Saved!', 'Your note has been saved.', 'success');
+            } else {
+                Swal.fire('Error!', 'Please write something before saving.', 'error');
+            }
+        });
+
+        clearBtn.addEventListener('click', () => {
+            editor.innerHTML = '';
+        });
+
+        speakBtn.addEventListener('click', () => {
+            const text = editor.innerText.trim();
+            if (text) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                window.speechSynthesis.speak(utterance);
+            } else {
+                Swal.fire('Error!', 'Please write something to speak.', 'error');
+            }
+        });
+
+        fontSizeBtn.addEventListener('click', () => {
+            const size = prompt('Enter the font size (e.g., 12px, 2em, 1.5rem)');
+            if (size) {
+                document.execCommand('fontSize', false, '7');
+                const fontElements = document.getElementsByTagName('font');
+                for (let i = 0; i < fontElements.length; i++) {
+                    if (fontElements[i].size === '7') {
+                        fontElements[i].removeAttribute('size');
+                        fontElements[i].style.fontSize = size;
+                    }
+                }
+            }
+        });
+
+        fontColorBtn.addEventListener('click', () => {
+            const color = prompt('Enter the font color (e.g., red, #ff0000)');
+            if (color) {
+                document.execCommand('foreColor', false, color);
+            }
+        });
+
+        highlightBtn.addEventListener('click', () => {
+            const color = prompt('Enter the highlight color (e.g., yellow, #ffff00)');
+            if (color) {
+                document.execCommand('hiliteColor', false, color);
+            }
+        });
+
+        undoBtn.addEventListener('click', () => {
+            document.execCommand('undo');
+        });
+
+        redoBtn.addEventListener('click', () => {
+            document.execCommand('redo');
+        });
+
+        cutBtn.addEventListener('click', () => {
+            document.execCommand('cut');
+        });
+
+        copyBtn.addEventListener('click', () => {
+            document.execCommand('copy');
+        });
+
+        pasteBtn.addEventListener('click', () => {
+            document.execCommand('paste');
+        });
+
+        selectAllBtn.addEventListener('click', () => {
+            document.execCommand('selectAll');
+        });
+
+        printBtn.addEventListener('click', () => {
+            window.print();
+        });
+
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            const noteContent = editor.innerHTML.trim();
+            if (noteContent) {
+                const blob = new Blob([noteContent], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'note.html';
+                a.click();
+                URL.revokeObjectURL(url);
+            } else {
+                Swal.fire('Error!', 'Please write something before downloading.', 'error');
+            }
+        });
+
+        uploadBtn.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'text/html';
+            input.onchange = (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        editor.innerHTML = e.target.result;
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        });
+
+        findBtn.addEventListener('click', () => {
+            const query = prompt('Enter the text to find');
+            if (query) {
+                const range = document.createRange();
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                const textNode = editor.firstChild;
+                const startIndex = textNode.textContent.indexOf(query);
+                if (startIndex !== -1) {
+                    range.setStart(textNode, startIndex);
+                    range.setEnd(textNode, startIndex + query.length);
+                    selection.addRange(range);
+                } else {
+                    Swal.fire('Not Found!', 'The text was not found.', 'info');
+                }
+            }
+        });
+
+       
+        replaceBtn.addEventListener('click', () => {
+            const findText = prompt('Enter the text to find');
+            const replaceText = prompt('Enter the text to replace with');
+            if (findText && replaceText) {
+                const content = editor.innerHTML;
+                const newContent = content.replace(new RegExp(findText, 'g'), replaceText);
+                editor.innerHTML = newContent;
+            }
+        });
+
+        spellcheckBtn.addEventListener('click', () => {
+            // This is a placeholder for spell check functionality
+            Swal.fire('Spell Check', 'Spell check functionality is not implemented.', 'info');
+        });
+
+        grammarCheckBtn.addEventListener('click', () => {
+            // This is a placeholder for grammar check functionality
+            Swal.fire('Grammar Check', 'Grammar check functionality is not implemented.', 'info');
+        });
+
+        wordCountBtn.addEventListener('click', () => {
+            const text = editor.innerText.trim();
+            const wordCount = text.split(/\s+/).length;
+            Swal.fire('Word Count', `The document contains ${wordCount} words.`, 'info');
+        });
+
+        charCountBtn.addEventListener('click', () => {
+            const text = editor.innerText.trim();
+            const charCount = text.length;
+            Swal.fire('Character Count', `The document contains ${charCount} characters.`, 'info');
+        });
+
+        toggleDarkModeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('bg-gray-900');
+            document.body.classList.toggle('text-white');
+            editor.classList.toggle('bg-gray-800');
+            editor.classList.toggle('text-white');
+        });
+
+        toggleReadOnlyBtn.addEventListener('click', () => {
+            editor.contentEditable = editor.contentEditable === 'true' ? 'false' : 'true';
+            Swal.fire('Read Only Mode', `Read only mode is now ${editor.contentEditable === 'true' ? 'disabled' : 'enabled'}.`, 'info');
+        });
+    </script>
+</body>
+</html>
