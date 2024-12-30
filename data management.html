@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Group Member Management</title>
+</head>
+<body>
+  <h2>Group Member Registration</h2>
+  
+  <form id="registerForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" required>
+    <br>
+    <label for="aadharNumber">Aadhar Number:</label>
+    <input type="text" id="aadharNumber" required>
+    <br>
+    <label for="registrationDate">Registration Date:</label>
+    <input type="date" id="registrationDate" required>
+    <br>
+    <button type="submit">Register Member</button>
+  </form>
+  
+  <h2>Payment Entry</h2>
+  <form id="paymentForm">
+    <label for="paymentAadhar">Aadhar Number:</label>
+    <input type="text" id="paymentAadhar" required>
+    <br>
+    <label for="paymentDate">Payment Date:</label>
+    <input type="date" id="paymentDate" required>
+    <br>
+    <label for="amount">Amount Paid:</label>
+    <input type="number" id="amount" required>
+    <br>
+    <label for="remarks">Remarks:</label>
+    <input type="text" id="remarks">
+    <br>
+    <button type="submit">Add Payment</button>
+  </form>
+
+  <h2>Registered Members</h2>
+  <ul id="membersList"></ul>
+
+  <script>
+    // Function to handle member registration
+    document.getElementById('registerForm').onsubmit = function(e) {
+      e.preventDefault();
+      var name = document.getElementById('name').value;
+      var aadharNumber = document.getElementById('aadharNumber').value;
+      var registrationDate = document.getElementById('registrationDate').value;
+      
+      google.script.run
+        .withSuccessHandler(function(response) {
+          alert(response);
+          loadMembers();
+        })
+        .registerMember(name, aadharNumber, registrationDate);
+    }
+
+    // Function to handle payment entry
+    document.getElementById('paymentForm').onsubmit = function(e) {
+      e.preventDefault();
+      var aadharNumber = document.getElementById('paymentAadhar').value;
+      var paymentDate = document.getElementById('paymentDate').value;
+      var amount = parseFloat(document.getElementById('amount').value);
+      var remarks = document.getElementById('remarks').value;
+      
+      google.script.run
+        .withSuccessHandler(function(response) {
+          alert(response);
+          loadMembers();
+        })
+        .addPayment(aadharNumber, paymentDate, amount, remarks);
+    }
+
+    // Function to load all members and display them
+    function loadMembers() {
+      google.script.run
+        .withSuccessHandler(function(members) {
+          var membersList = document.getElementById('membersList');
+          membersList.innerHTML = '';
+          members.forEach(function(member) {
+            var listItem = document.createElement('li');
+            listItem.textContent = member.name + ' (' + member.aadhar + ') - Amount Paid: ' + member.amountPaid;
+            membersList.appendChild(listItem);
+          });
+        })
+        .getMembers();
+    }
+
+    // Load members on page load
+    window.onload = loadMembers;
+  </script>
+</body>
+</html>
