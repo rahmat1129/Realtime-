@@ -1,0 +1,224 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-4 text-center">Text to Speech Tool</h1>
+        <textarea id="text-input" class="w-full p-2 border border-gray-300 rounded mb-4" rows="5" placeholder="Enter text here..."></textarea>
+        
+        <div class="mb-4">
+            <label for="voice-select" class="block mb-2">Select Voice:</label>
+            <select id="voice-select" class="w-full p-2 border border-gray-300 rounded">
+                <!-- Voice options will be populated here -->
+            </select>
+        </div>
+        
+        <div class="mb-4">
+            <label for="rate" class="block mb-2">Rate:</label>
+            <input type="range" id="rate" min="0.5" max="2" value="1" step="0.001" class="w-full">
+            <span id="rate-value" class="block text-center mt-2">1</span>
+        </div>
+        
+        <div class="mb-4">
+            <label for="pitch" class="block mb-2">Pitch:</label>
+            <input type="range" id="pitch" min="0" max="2" value="1" step="0.001" class="w-full">
+            <span id="pitch-value" class="block text-center mt-2">1</span>
+        </div>
+
+        <div class="mb-4">
+            <label for="volume" class="block mb-2">Volume:</label>
+            <input type="range" id="volume" min="0" max="3" value="1" step="0.001" class="w-full">
+            <span id="volume-value" class="block text-center mt-2">1</span>
+        </div>
+
+        <div class="mb-4">
+            <label for="lang" class="block mb-2">Language:</label>
+            <select id="lang" class="w-full p-2 border border-gray-300 rounded">
+                <option value="en-US">English (US)</option>
+                <option value="en-GB">English (UK)</option>
+                <option value="hi-IN">Hindi (India)</option>
+                <!-- Add more languages as needed -->
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="voice-style" class="block mb-2">Voice Style:</label>
+            <select id="voice-style" class="w-full p-2 border border-gray-300 rounded">
+                <option value="default">Default</option>
+                <option value="conversational">Conversational</option>
+                <option value="narrative">Narrative</option>
+                <option value="news">News</option>
+                <!-- Add more styles as needed -->
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="emotion" class="block mb-2">Emotion:</label>
+            <select id="emotion" class="w-full p-2 border border-gray-300 rounded">
+                <option value="neutral">Neutral</option>
+                <option value="happy">Happy</option>
+                <option value="sad">Sad</option>
+                <option value="angry">Angry</option>
+                <!-- Add more emotions as needed -->
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label for="intonation" class="block mb-2">Intonation:</label>
+            <select id="intonation" class="w-full p-2 border border-gray-300 rounded">
+                <option value="flat">Flat</option>
+                <option value="rising">Rising</option>
+                <option value="falling">Falling</option>
+                <option value="rising-falling">Rising-Falling</option>
+                <!-- Add more intonations as needed -->
+            </select>
+        </div>
+        
+        <div class="flex space-x-2 mb-4">
+            <button id="speak-btn" class="flex-1 bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Speak</button>
+            <button id="stop-btn" class="flex-1 bg-red-500 text-white py-2 rounded hover:bg-red-600">Stop</button>
+        </div>
+        
+        <div class="flex space-x-2">
+            <button id="download-btn" class="flex-1 bg-green-500 text-white py-2 rounded hover:bg-green-600">Download</button>
+            <button id="play-btn" class="flex-1 bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600">Play</button>
+        </div>
+    </div>
+
+    <script>
+        const synth = window.speechSynthesis;
+        const textInput = document.getElementById('text-input');
+        const voiceSelect = document.getElementById('voice-select');
+        const rate = document.getElementById('rate');
+        const rateValue = document.getElementById('rate-value');
+        const pitch = document.getElementById('pitch');
+        const pitchValue = document.getElementById('pitch-value');
+        const volume = document.getElementById('volume');
+        const volumeValue = document.getElementById('volume-value');
+        const langSelect = document.getElementById('lang');
+        const voiceStyle = document.getElementById('voice-style');
+        const emotion = document.getElementById('emotion');
+        const intonation = document.getElementById('intonation');
+        const speakButton = document.getElementById('speak-btn');
+        const stopButton = document.getElementById('stop-btn');
+        const downloadButton = document.getElementById('download-btn');
+        const playButton = document.getElementById('play-btn');
+
+        let utterance;
+        let audioBlob;
+        let mediaRecorder;
+        let audioChunks = [];
+
+        function populateVoiceList() {
+            const voices = synth.getVoices();
+            voiceSelect.innerHTML = '';
+            voices.forEach((voice, index) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = index;
+                voiceSelect.appendChild(option);
+            });
+        }
+
+        populateVoiceList();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = populateVoiceList;
+        }
+
+        rate.addEventListener('input', () => {
+            rateValue.textContent = rate.value;
+            if (utterance) {
+                utterance.rate = rate.value;
+                synth.cancel();
+                synth.speak(utterance);
+            }
+        });
+
+        pitch.addEventListener('input', () => {
+            pitchValue.textContent = pitch.value;
+            if (utterance) {
+                utterance.pitch = pitch.value;
+                synth.cancel();
+                synth.speak(utterance);
+            }
+        });
+
+        volume.addEventListener('input', () => {
+            volumeValue.textContent = volume.value;
+            if (utterance) {
+                utterance.volume = volume.value;
+                synth.cancel();
+                synth.speak(utterance);
+            }
+        });
+
+        speakButton.addEventListener('click', () => {
+            const text = textInput.value;
+            if (text.trim() !== '') {
+                utterance = new SpeechSynthesisUtterance(text);
+                const selectedVoice = synth.getVoices()[voiceSelect.value];
+                utterance.voice = selectedVoice;
+                utterance.rate = rate.value;
+                utterance.pitch = pitch.value;
+                utterance.volume = volume.value;
+                utterance.lang = langSelect.value;
+
+                // Apply voice style, emotion, and intonation
+                utterance.voiceStyle = voiceStyle.value;
+                utterance.emotion = emotion.value;
+                utterance.intonation = intonation.value;
+
+                synth.speak(utterance);
+
+                const stream = new MediaStream();
+                const audioContext = new AudioContext();
+                const source = audioContext.createMediaStreamSource(stream);
+                mediaRecorder = new MediaRecorder(stream);
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+                mediaRecorder.onstop = () => {
+                    audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    audioChunks = [];
+                };
+                mediaRecorder.start();
+                utterance.onend = () => {
+                    mediaRecorder.stop();
+                };
+            } else {
+                alert('Please enter some text.');
+            }
+        });
+
+        stopButton.addEventListener('click', () => {
+            synth.cancel();
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+            }
+        });
+
+        playButton.addEventListener('click', () => {
+            if (audioBlob) {
+                const audioUrl = URL.createObjectURL(audioBlob);
+                const audio = new Audio(audioUrl);
+                audio.play();
+            } else {
+                alert('No audio available. Please generate speech first.');
+            }
+        });
+
+        downloadButton.addEventListener('click', () => {
+            if (audioBlob) {
+                saveAs(audioBlob, 'speech.wav');
+            } else {
+                alert('No audio available. Please generate speech first.');
+            }
+        });
+    </script>
+</body>
+</html>
