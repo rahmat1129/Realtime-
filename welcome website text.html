@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Text Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 20px;
+        }
+        #output {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Enter Website URL</h1>
+        <input type="text" id="urlInput" placeholder="Enter website URL" style="width: 100%; padding: 10px;">
+        <button onclick="fetchWebsiteContent()">Fetch Website</button>
+
+        <div id="output"></div>
+    </div>
+
+    <script>
+        function fetchWebsiteContent() {
+            const url = document.getElementById('urlInput').value.trim();
+            
+            // URL validation
+            if (!url) {
+                alert('Please enter a valid URL');
+                return;
+            }
+
+            // Check if URL starts with http:// or https://
+            if (!/^https?:\/\//i.test(url)) {
+                alert('Please enter a valid URL starting with http:// or https://');
+                return;
+            }
+
+            // Construct the proxy URL and fetch the website content
+            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+            const finalUrl = proxyUrl + url;
+
+            fetch(finalUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch the website content');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('output').textContent = data;
+                })
+                .catch(error => {
+                    document.getElementById('output').textContent = `Error: ${error.message}`;
+                });
+        }
+    </script>
+</body>
+</html>
