@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loan Management System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    header {
+      background-color: #007BFF;
+      color: white;
+      padding: 1rem 0;
+      text-align: center;
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    section {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    h1, h2 {
+      color: #007BFF;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input, button {
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #007BFF;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    button.pink {
+      background-color: pink;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    /* Loading Popup */
+    #loadingPopup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      font-size: 6.5rem;
+      text-align: center;
+      line-height: 100vh;
+    }
+
+    /* Success Popup */
+    #successPopup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      color: #333;
+    }
+
+    /* Login Styles */
+    #loginSection {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f9;
+    }
+
+    #loginForm {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+    }
+  </style>
+  <script>
+    const googleScriptURL = "https://script.google.com/macros/s/AKfycbwT7YdGfYQ3WXCY1F5n1UFUF2TkS798CXf8YKcRJFrGe0pD6rlsjn2H8l0VWPVjajYsBQ/exec";
+    let loggedIn = false;
+
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      if (username === 'mdrahmatali01129@gmail' && password === '1234') {
+        loggedIn = true;
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('loanTool').style.display = 'block';
+      } else {
+        alert('Invalid credentials. Please try again.');
+      }
+    }
+
+    async function registerMember() {
+      const button = document.querySelector('button[type="submit"]');
+      button.classList.add("pink");
+      document.getElementById('loadingPopup').style.display = "block";
+
+      const data = {
+        name: document.getElementById('name').value,
+        aadhar: document.getElementById('aadhar').value,
+        address: document.getElementById('address').value,
+        fatherName: document.getElementById('fatherName').value,
+        mobile: document.getElementById('mobile').value,
+        gmail: document.getElementById('gmail').value,
+        loanAmount: parseFloat(document.getElementById('loanAmount').value),
+        interest: parseFloat(document.getElementById('interest').value)
+      };
+
+      const response = await fetch(googleScriptURL + "?action=registerMember", {
+        method: "POST",
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      document.getElementById('loadingPopup').style.display = "none";
+      if (result.success) {
+        document.getElementById('successPopup').innerHTML = `<p>Member registered! Unique ID: ${result.uniqueId}</p>`;
+        document.getElementById('successPopup').style.display = "block";
+        setTimeout(() => {
+          document.getElementById('successPopup').style.display = "none";
+        }, 3000);
+      } else {
+        alert("Failed to register member.");
+      }
+      button.classList.remove("pink");
+    }
+
+    async function addMoney() {
+      const button = document.querySelector('button[type="submit"]');
+      button.classList.add("pink");
+      document.getElementById('loadingPopup').style.display = "block";
+
+      const data = {
+        uniqueId: parseInt(document.getElementById('uniqueId').value),
+        description: document.getElementById('description').value,
+        amount: parseFloat(document.getElementById('amount').value)
+      };
+
+      const response = await fetch(googleScriptURL + "?action=addMoney", {
+        method: "POST",
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      document.getElementById('loadingPopup').style.display = "none";
+      if (result.success) {
+        document.getElementById('successPopup').innerHTML = "<p>Payment added successfully!</p>";
+        document.getElementById('successPopup').style.display = "block";
+        setTimeout(() => {
+          document.getElementById('successPopup').style.display = "none";
+        }, 3000);
+      } else {
+        alert(result.message);
+      }
+      button.classList.remove("pink");
+    }
+  </script>
+</head>
+<body>
+  <div id="loginSection">
+    <div id="loginForm">
+      <h2>Login</h2>
+      <form onsubmit="event.preventDefault(); login();">
+        <input type="text" id="username" placeholder="Gmail" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="loanTool" style="display:none;">
+    <header>
+      <h1>Loan Management System</h1>
+    </header>
+
+    <main>
+      <section>
+        <h2>Register Member</h2>
+        <form onsubmit="event.preventDefault(); registerMember();">
+          <input type="text" id="name" placeholder="Name" required>
+          <input type="text" id="aadhar" placeholder="Aadhar Number" required>
+          <input type="text" id="address" placeholder="Address" required>
+          <input type="text" id="fatherName" placeholder="Father Name" required>
+          <input type="text" id="mobile" placeholder="Mobile" required>
+          <input type="email" id="gmail" placeholder="Gmail" required>
+          <input type="number" id="loanAmount" placeholder="Loan Amount" required>
+          <input type="number" id="interest" placeholder="Interest (%)" required>
+          <button type="submit">Register</button>
+        </form>
+      </section>
+
+      <section>
+        <h2>Add Money</h2>
+        <form onsubmit="event.preventDefault(); addMoney();">
+          <input type="number" id="uniqueId" placeholder="Unique ID" required>
+          <input type="text" id="description" placeholder="Description" required>
+          <input type="number" id="amount" placeholder="Amount" required>
+          <button type="submit">Add Money</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 Loan Management System. All rights reserved.</p>
+    </footer>
+
+    <div id="loadingPopup">Please wait... </div>
+    <div id="successPopup"></div>
+  </div>
+</body>
+</html>
