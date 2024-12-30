@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Save Data to Google Sheets</title>
+</head>
+<body>
+  <h1>Form Data to Google Sheets</h1>
+  <form id="dataForm">
+    <label>Name: <input type="text" name="name" required></label><br>
+    <label>Phone Number: <input type="text" name="phone" required></label><br>
+    <label>Email: <input type="email" name="gmail" required></label><br>
+    <label>Address: <textarea name="address" required></textarea></label><br>
+    <label>Instagram: <input type="url" name="instagram"></label><br>
+    <label>Facebook: <input type="url" name="facebook"></label><br>
+    <label>YouTube: <input type="url" name="youtube"></label><br>
+    <label>Telegram: <input type="url" name="telegram"></label><br>
+    <label>WhatsApp: <input type="text" name="whatsapp"></label><br>
+    <label>Website: <input type="url" name="website"></label><br>
+    <label>Upload Image: <input type="file" id="image" required></label><br>
+    <button type="submit">Submit</button>
+  </form>
+  <script>
+    const form = document.getElementById('dataForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const imageFile = document.getElementById('image').files[0];
+      const reader = new FileReader();
+
+      reader.onload = async () => {
+        const imageBase64 = reader.result.split(',')[1]; // Base64 encoding
+        formData.append('image', imageBase64);
+
+        const response = await fetch('https://script.google.com/macros/s/AKfycbwZBnzEFw9aVhW2xDfdSsMB6QCLLHHyvOo2SNBT7lxy6IW4BGAmXoar7cEqIJHmkUG8GQ/exec', {
+          method: 'POST',
+          body: JSON.stringify(Object.fromEntries(formData)),
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        const result = await response.json();
+        alert(result.message);
+      };
+
+      reader.readAsDataURL(imageFile);
+    });
+  </script>
+</body>
+</html>
