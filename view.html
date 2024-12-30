@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loan Management System</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    header {
+      background-color: #007BFF;
+      color: white;
+      padding: 1rem 0;
+      text-align: center;
+    }
+
+    main {
+      padding: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    section {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    h1, h2 {
+      color: #007BFF;
+      text-align: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input, button {
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #007BFF;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    #toolSection {
+      display: none;
+    }
+  </style>
+  <script>
+    const googleScriptURL = "https://script.google.com/macros/s/AKfycbwT7YdGfYQ3WXCY1F5n1UFUF2TkS798CXf8YKcRJFrGe0pD6rlsjn2H8l0VWPVjajYsBQ/exec";
+    const validGmail = "mdrahmatali1129@gmail.com";
+    const validPassword = "group@1129";
+
+    function login() {
+      const gmail = document.getElementById('loginGmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      if (gmail === validGmail && password === validPassword) {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('toolSection').style.display = 'block';
+      } else {
+        alert("Invalid Gmail or Password!");
+      }
+    }
+
+    async function registerMember() {
+      const data = {
+        name: document.getElementById('name').value,
+        aadhar: document.getElementById('aadhar').value,
+        address: document.getElementById('address').value,
+        fatherName: document.getElementById('fatherName').value,
+        mobile: document.getElementById('mobile').value,
+        gmail: document.getElementById('gmail').value,
+        loanAmount: parseFloat(document.getElementById('loanAmount').value),
+        interest: parseFloat(document.getElementById('interest').value)
+      };
+
+      const response = await fetch(googleScriptURL + "?action=registerMember", {
+        method: "POST",
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      alert(result.success ? `Member registered! Unique ID: ${result.uniqueId}` : "Failed to register member.");
+    }
+
+    async function addMoney() {
+      const data = {
+        uniqueId: parseInt(document.getElementById('uniqueId').value),
+        description: document.getElementById('description').value,
+        amount: parseFloat(document.getElementById('amount').value)
+      };
+
+      const response = await fetch(googleScriptURL + "?action=addMoney", {
+        method: "POST",
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+      alert(result.success ? "Payment added successfully!" : result.message);
+    }
+  </script>
+</head>
+<body>
+  <!-- Login Section -->
+  <div id="loginSection" style="padding: 2rem;">
+    <h2>Login to Access the Tool</h2>
+    <form onsubmit="event.preventDefault(); login();">
+      <input type="email" id="loginGmail" placeholder="Enter Gmail" required>
+      <input type="password" id="loginPassword" placeholder="Enter Password" required>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <!-- Tool Section (hidden initially) -->
+  <div id="toolSection">
+    <header>
+      <h1>Loan Management System</h1>
+    </header>
+
+    <main>
+      <!-- Register Member Section -->
+      <section>
+        <h2>Register Member</h2>
+        <form onsubmit="event.preventDefault(); registerMember();">
+          <input type="text" id="name" placeholder="Name" required>
+          <input type="text" id="aadhar" placeholder="Aadhar Number" required>
+          <input type="text" id="address" placeholder="Address" required>
+          <input type="text" id="fatherName" placeholder="Father Name" required>
+          <input type="text" id="mobile" placeholder="Mobile" required>
+          <input type="email" id="gmail" placeholder="Gmail" required>
+          <input type="number" id="loanAmount" placeholder="Loan Amount" required>
+          <input type="number" id="interest" placeholder="Interest (%)" required>
+          <button type="submit">Register</button>
+        </form>
+      </section>
+
+      <!-- Add Money Section -->
+      <section>
+        <h2>Add Money</h2>
+        <form onsubmit="event.preventDefault(); addMoney();">
+          <input type="number" id="uniqueId" placeholder="Unique ID" required>
+          <input type="text" id="description" placeholder="Description" required>
+          <input type="number" id="amount" placeholder="Amount" required>
+          <button type="submit">Add Money</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 Loan Management System. All rights reserved.</p>
+    </footer>
+  </div>
+</body>
+</html>
